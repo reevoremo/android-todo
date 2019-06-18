@@ -3,8 +3,11 @@ package fr.epita.android.todo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.BaseAdapter
+import android.widget.ListView
 import android.widget.Toast
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -32,6 +35,13 @@ class MainActivity : AppCompatActivity() {
                    if (response.body() != null) {
                        val data = response.body()
                        Toast.makeText(this@MainActivity, "Size of data : " + data!!.size, Toast.LENGTH_LONG).show()
+                       //val todoListView : ListView = findViewById(R.id.activity_main_list_todo)
+                       activity_main_list_todo.adapter = ToDoListAdapter(this@MainActivity, data)
+                       activity_main_list_todo.setOnItemClickListener { parent, view, position, id ->
+                           data[position].completed = data[position].completed
+                           (activity_main_list_todo.adapter as BaseAdapter).notifyDataSetChanged()
+                       }
+
                    }
                }
             }
